@@ -7,6 +7,9 @@ venv/
 __pycache__/
 
 instance/
+migrations/
+project.db
+
 
 .pytest_cache/
 .coverage

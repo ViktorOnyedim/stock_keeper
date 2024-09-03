@@ -2,11 +2,8 @@ from flask import Blueprint, request, render_template, session, url_for, redirec
 
 from app.extensions import db
 from app.models.models import User
-from app.extensions import SECRET_KEY
 
 bp = Blueprint("app", __name__)
-
-bp.secret_key = SECRET_KEY
 
 
 @bp.route("/")
@@ -15,9 +12,6 @@ def index():
         return redirect(url_for("stock/dashboard"))
     return render_template("stock/index.html")
 
-@bp.route('/dashboard/')
-def dashboard():
-    return render_template("stock/dashboard.html")
 
 @bp.route('/login/', methods=["GET", "POST"])
 def login():
@@ -26,10 +20,11 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         user = User.query.filter_by(username=username).first()
-        if user and user.checkpassword(password):
+        if user and user.check_password(password):
             session["username"] = username
-            redirect(url_for("dashboard"))
-        else: 
+            return redirect(url_for("app.dashboard"))
+        else:
+            print("user does not exist")
             return render_template("auth/login.html")
     return render_template("auth/login.html")
 
@@ -39,23 +34,33 @@ def register():
         # Collect info from the form
         username = request.form["username"]
         password = request.form["password"]
+        email = request.form["email"]
         user = User.query.filter_by(username=username).first()
         if user:
-            return render_template("auth/register.html", error="User already here")
+            print("error: user already exists")
+            return render_template("auth/register.html", error="User already exists")
         else:
-            new_user = User(username=username)
+            new_user = User(username=username, email=email)
             new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
             session["username"] = username
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('app.dashboard'))
     else:
         return render_template("auth/register.html")
 
 
 @bp.route('/logout/')
 def logout():
-    return render_template("auth/logout.html")
+    session.pop('username', None)
+    return redirect(url_for('app.index'))
+
+
+@bp.route('/dashboard/')
+def dashboard():
+    if "username" in session:
+        return render_template("stock/dashboard.html", username=session["username"])
+    return redirect(url_for('app.index'))
 
 
 @bp.route("/categories/", methods=["GET", "POST"])

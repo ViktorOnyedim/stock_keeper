@@ -9,11 +9,11 @@
 <body>
     <nav class="bg-indigo-600 text-white py-3">
         <ul class="flex justify-around">
-            <li><a href="{{ url_for('main.categories')}}">Categories</a></li>
-            <li><a href="{{ url_for('main.items')}}">Items</a></li>
-            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-            <li><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
-            <li><a href="{{ url_for('auth.logout')}}">Logout</a></li>
+            <li><a href="{{ url_for('app.categories')}}">Categories</a></li>
+            <li><a href="{{ url_for('app.items')}}">Items</a></li>
+            <li><a href="{{ url_for('app.logout')}}">Logout</a></li>
+            <li><a href="{{ url_for('app.login') }}">Login</a></li>
+            <li><a href="{{ url_for('app.register') }}">Sign Up</a></li>
         </ul>
     </nav>
     <section class="justify-center items-center flex h-[90vh]">
