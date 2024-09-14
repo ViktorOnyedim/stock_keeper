@@ -23,48 +23,154 @@
       };
     </script>
   </head>
-  <body class="bg-gray-100 font-sans">
 
-    <nav>
-      <div>
-        <div>
-          <div>
-            <a href="{{url_for('app.index')}}">
-              <svg class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+  <body class="bg-gray-100 font-sans">
+    <nav
+      class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white shadow-lg"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex-shrink-0">
+            <a href="{{url_for('app.index')}}" class="flex items-center">
+              <svg
+                class="h-8 w-8 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
               </svg>
-              <span>Stock Keeper</span>
+              <span class="text-xl font-bold">Stock Keeper</span>
             </a>
           </div>
-          <div>
-            <div><a href="{{ url_for('app.get_categories')}}">Categories</a>
-              <a href="{{ url_for('app.get_products')}}">Products</a>
-              <a href="{{ url_for('app.transactions')}}">Transactions</a>
-              <a href="{{ url_for('app.logout')}}">Logout</a>
-              <a href="{{ url_for('app.login')}}">Login</a>
-              <a href="{{ url_for('app.register')}}">Sign Up</a></div>
+          <div class="hidden md:block">
+            <div>
+              {% if "username" in session %}
+              <a
+                href="{{ url_for('app.get_categories')}}"
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Categories</a
+              >
+              <a
+                href="{{ url_for('app.get_products')}}"
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Products</a
+              >
+              <a
+                href="{{ url_for('app.transactions')}}"
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Transactions</a
+              >
+              <a
+                href="{{ url_for('app.logout')}}"
+                id="logout-btn
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Logout</a
+              >
+              {% else %}
+              <a
+                href="{{ url_for('app.login')}}"
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Login</a
+              >
+              <a
+                href="{{ url_for('app.register')}}"
+                class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+                >Sign Up</a
+              >
+              {% endif %}
+            </div>
           </div>
-          <div>
-            <button>
-              <span></span>
-              <svg></svg>
-              <svg></svg>
+
+          <!-- Button -->
+          <div class="mobile-menu-button md:hidden">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center p-2 rounded-md text-indigo-200 hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="menu-icon block h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+              <svg
+                class="menu-icon hidden h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
-          </div>
-          <div>
-            <div><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a></div>
           </div>
         </div>
       </div>
+
+      <!-- Mobile menu -->
+      <div class="hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          {% if "username" in session %}
+          <a
+            href="{{ url_for('app.get_categories')}}"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Categories</a
+          >
+          <a
+            href="{{ url_for('app.get_products')}}"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Products</a
+          >
+          <a
+            href="{{ url_for('app.transactions')}}"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Transactions</a
+          >
+          <a
+            href="{{ url_for('app.logout')}}"
+            id="logout-btn"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Logout</a
+          >
+          {% else %}
+          <a
+            href="{{ url_for('app.login')}}"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Login</a
+          >
+          <a
+            href="{{ url_for('app.register')}}"
+            class="block px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-500 hover:text-white transition duration-300"
+            >Sign Up</a
+          >
+          {% endif %}
+        </div>
+      </div>
     </nav>
-
-
-
-
-
-
-
-
 
     <!-- <nav
       class="bg-indigo-600 text-white shadow-lg px-10 py-3 flex justify-between"
@@ -110,22 +216,49 @@
     </nav> -->
     <!-- <section class="justify-center items-center flex h-[90vh]"> -->
     <section class="min-h-[90vh] px-10 py-4">
-      {% with message = get_flashed_messages(with_categories=true) %} 
-        {% if messages %} 
-          {% for category, message in messages %}
-            <div
-              class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}"
-            >
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+      {% with message = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="mb-4 p-4 rounded-lg {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
 
       <div>{% block content %} {% endblock %}</div>
     </section>
 
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const mobileMenuButton = document.querySelector(
+          '[aria-controls="mobile-menu"]'
+        );
+        const mobileMenu = document.getElementById("mobile-menu");
+        const menuIcons = document.querySelectorAll('.menu-icon');
+        
+        if (mobileMenuButton && mobileMenu && menuIcons.length === 2) {
+          mobileMenuButton.addEventListener('click', (event) => {
+            const button = event.currentTarget;
+            const expanded = button.getAttribute('aria-expanded') === 'true' || false;
+            
+            button.setAttribute('aria-expanded', !expanded);
+            mobileMenu.classList.toggle('hidden');
+
+            menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+          });
+        }
+
+
+        // mobileMenuButton.addEventListener("click", () => {
+        //   const expanded =
+        //     this.getAttribute("aria-expanded") === "true" || false;
+        //   this.setAttribute("aria-expanded", !expanded);
+        //   mobileMenu.classList.toggle("hidden");
+        //   this.querySelector(".block").classList.toggle("hidden");
+        //   this.querySelector(".hidden").classList.toggle("hidden");
+        // });
+      });
+
       logout_btn = document.getElementById("logout-btn");
       logout_btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -140,15 +273,14 @@
 
       if (sticky_div) {
         window.addEventListener("scroll", () => {
-        const rect = sticky_div.getBoundingClientRect();
-        if (rect.top <= 20) {
-          product_heading.style.visibility = "hidden";
-        } else {
-          product_heading.style.visibility = "visible";
-        }
-      });
+          const rect = sticky_div.getBoundingClientRect();
+          if (rect.top <= 20) {
+            product_heading.style.visibility = "hidden";
+          } else {
+            product_heading.style.visibility = "visible";
+          }
+        });
       }
-      
     </script>
   </body>
 </html>
