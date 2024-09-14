@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Stock Keeper</h1>
+    <div class="min-h-[80vh] flex flex-col justify-center text-center">
+        <h1 class="text-4xl font-bold mb-4">Welcome to Stock Keeper Inventory Management System</h1>
+        <p class="text-xl mb-8">Efficiently manage your products, categories, and transactions.</p>
+        <div class="space-x-4">
+            <a href="{{ url_for('app.login') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Login</a>
+            <a href="{{ url_for('app.register') }}" class="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Get Started</a>
+        </div>
+    </div>
+    <!-- <h1 class="text-4xl uppercase font-bold">Welcome to Stock Keeper!</h1>
+    <div class="flex justify-center mt-10">
+        <a href="{{url_for('app.register')}}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 mx-2 rounded-md">Register</a>
+        <a href="{{url_for('app.login')}}" class="hover:bg-indigo-600 hover:text-white border border-black px-6 py-2 mx-2 rounded-md">Sign In</a>
+    </div> -->
 {% endblock %}
