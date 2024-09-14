@@ -1,14 +1,15 @@
 from app.extensions import db
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, Integer, DateTime
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 # from flask_login import UserMixin
+import uuid
+from datetime import timedelta
 
 class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     username: Mapped[str] = mapped_column(String(25), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -48,33 +49,44 @@ class User(db.Model):
 #         return f"<User {self.name}>"
     
 class Category(db.Model):
-    __tablename__ = "categories"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True, nullable=True)
-    description: Mapped[str] = mapped_column(String(255), nullable=True)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    name: Mapped[str] = mapped_column(String(100), nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
     
-    items: Mapped[List["Item"]] = relationship("Item", back_populates="category")
+    products: Mapped[List["Product"]] = relationship(back_populates="category")
     
     def __repr__(self):
         return f"<Category {self.name}>"
 
-class Item(db.Model):
-    __tablename__ = "items"
+class Product(db.Model):
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
-    category: Mapped["Category"] = relationship("Category", back_populates="items")
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    category_id: Mapped[str] = mapped_column(ForeignKey("category.id"), nullable=False)
 
-    name: Mapped[str] = mapped_column(unique=True, nullable=True)
-    description: Mapped[str] = mapped_column(nullable=True)
-    quantity_in_stock: Mapped[int] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    name: Mapped[str] = mapped_column(String(100), nullable=True) # Change the nullable later
+    description: Mapped[Optional[str]] = mapped_column(String(255))
+    quantity: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-class Transactions(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[str] = mapped_column(nullable=True)
-    quantity_in: Mapped[int] = mapped_column()
-    quantity_out: Mapped[int] = mapped_column()
-    balance: Mapped[int] = mapped_column()
-    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    category: Mapped["Category"] = relationship(back_populates="products")
+    transactions: Mapped[List["Transaction"]] = relationship(back_populates="product")
+
+
+    def __repr__(self):
+        return f"<Product {self.name}>"
+class Transaction(db.Model):
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    product_id: Mapped[str] = mapped_column(ForeignKey("product.id"), nullable=False)
+    
+    type: Mapped[str] = mapped_column(String(3), nullable=False) # 'in' or 'out'
+    purpose: Mapped[Optional[str]] = mapped_column(String(255))
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    transaction_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    product: Mapped["Product"] = relationship(back_populates="transactions")
+
