@@ -163,8 +163,6 @@ def create_product():
         if existing_products:
             return f"The product name '{name}' already exists"
     
-        
-
         new_product = Product(name=name, quantity=int(quantity), category_id=category.id, description=description)
 
         try:
