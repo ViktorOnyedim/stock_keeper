@@ -1,5 +1,175 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">Transactions</h1>
 
-{% block content %}
+  <!-- Add Transaction Form -->
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 class="text-2xl font-bold mb-4">Add New Transaction</h2>
+    <form onsubmit="event.preventDefault(); add_transaction();">
+      <!-- <form action="{{ url_for('app.add_transaction')}}" method="POST"> -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="product_id"
+        >
+          Product
+        </label>
+        <select
+          name="product_id"
+          id="product_id"
+          class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        >
+          <option value="">Select a product</option>
+          {% for product in products %}
+          <option value="{{ product.id }}">{{ product.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
+          Type
+        </label>
+        <select
+          name="type"
+          id="type"
+          class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        >
+          <option value="in">In</option>
+          <option value="out">Out</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="quantity"
+        >
+          Quantity
+        </label>
+        <input
+          type="number"
+          name="quantity"
+          id="quantity"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="purpose">
+          Purpose
+        </label>
+        <input
+          type="text"
+          name="purpose"
+          id="purpose"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
+          Add Transaction
+        </button>
+      </div>
+    </form>
+  </div>
 
+  <!-- Transactions List -->
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 class="text-2xl font-bold mb-4">Recent Transactions</h2>
+    <table class="min-w-full leading-normal">
+      <thead>
+        <tr>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Product
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Type
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Quantity
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Purpose
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Date
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in transactions %}
+        <tr>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ transaction.product.name }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ transaction.type }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ transaction.quantity }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ transaction.purpose }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ transaction.transaction_date.strftime('%Y-%m-%d %H:%M:%S') }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const add_transaction = () => {
+    alert("hello");
+    const product_id = document.getElementById("product_id").value;
+    const type = document.getElementById("type").value;
+    const quantity = document.getElementById("quantity").value;
+    const purpose = document.getElementById("purpose").value;
+
+    fetch("/transactions/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        product_id: product_id,
+        type: type,
+        quantity: parseInt(quantity),
+        purpose: purpose,
+        transaction_date: new Date().toISOString()
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message) {
+          alert(data.message);
+        } else {
+            alert("Transaction added successfully!");
+            console.log(data); // for debugging purposes
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred while processing the transaction.");
+      });
+  };
+</script>
 {% endblock %}
