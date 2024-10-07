@@ -173,48 +173,7 @@
       </div>
     </nav>
 
-    <!-- <nav
-      class="bg-indigo-600 text-white shadow-lg px-10 py-3 flex justify-between"
-    >
-      <div>
-        <a href="{{url_for('app.index')}}" class="block text-2xl font-bold"
-          >Stock Keeper</a
-        >
-      </div>
-      <ul class="hidden md:flex justify-around items-between">
-        {% if "username" in session %}
-        <li class="px-3 py-1 rounded-md hover:bg-indigo-500">
-          <a href="{{ url_for('app.get_categories')}}">Categories</a>
-        </li>
-        <li class="px-3 py-1 rounded-md hover:bg-indigo-500">
-          <a href="{{ url_for('app.get_products')}}">Products</a>
-        </li>
-        <li class="px-3 py-1 rounded-md hover:bg-indigo-500">
-          <a href="{{ url_for('app.transactions')}}">Transactions</a>
-        </li>
-        <li
-          class="px-3 py-1 rounded-md hover:bg-indigo-500 transition duration-200"
-        >
-          <a href="{{ url_for('app.logout')}}" id="logout-btn">Logout</a>
-        </li>
-        {% else %}
-        <li
-          class="px-3 py-1 rounded-md hover:bg-indigo-500 transition duration-200"
-        >
-          <a href="{{ url_for('app.login') }}">Login</a>
-        </li>
-        <li class="px-3 py-1 rounded-md hover:bg-indigo-500">
-          <a href="{{ url_for('app.register') }}">Sign Up</a>
-        </li>
-        {% endif %}
-      </ul>
-      <button class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-        
-      </button>
-    </nav> -->
+    
     <!-- <section class="justify-center items-center flex h-[90vh]"> -->
     <section class="min-h-[90vh] px-10 py-4">
       {% with message = get_flashed_messages(with_categories=true) %} {% if
